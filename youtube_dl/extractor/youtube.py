@@ -2544,15 +2544,18 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
 
                     comment = meta_comment['commentThreadRenderer']['comment']['commentRenderer']
 
-                    video_comments.append({
-                        'id': comment['commentId'],
-                        'text': ''.join([c['text'] for c in comment['contentText']['runs']]),
-                        'time_text': ''.join([c['text'] for c in comment['publishedTimeText']['runs']]),
-                        'author': comment.get('authorText', {}).get('simpleText', ''),
-                        'votes': comment.get('voteCount', {}).get('simpleText', '0'),
-                        'author_thumbnail': comment['authorThumbnail']['thumbnails'][-1]['url'],
-                        'parent': 'root'
-                    })
+                    try:
+                        video_comments.append({
+                            'id': comment['commentId'],
+                            'text': ''.join([c['text'] for c in comment['contentText']['runs']]),
+                            'time_text': ''.join([c['text'] for c in comment['publishedTimeText']['runs']]),
+                            'author': comment.get('authorText', {}).get('simpleText', ''),
+                            'votes': comment.get('voteCount', {}).get('simpleText', '0'),
+                            'author_thumbnail': comment['authorThumbnail']['thumbnails'][-1]['url'],
+                            'parent': 'root'
+                        })
+                    except KeyError:
+                        pass
 
                     
                     if 'replies' not in meta_comment['commentThreadRenderer']:
